@@ -51,18 +51,6 @@ if ! npm -v &> /dev/null ; then
   if $HOMEBREW_AVAILABLE; then printf " or, as you have Homebrew available, run ${BLUE}brew install node${NC}\n"; fi
 fi
 
-AWSCLI_REASON="It is used if you're deploying to AWS."
-if ! aws --version &> /dev/null ; then
-  printf "${RED}AWS CLI is not installed.${NC} ${AWSCLI_REASON} See https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html\n"
-  if $HOMEBREW_AVAILABLE; then printf " or, as you have Homebrew available, run ${BLUE}brew install awscli${NC}\n"; fi
-else
-  printf "AWS CLI version ${BLUE}`aws --version`${NC} is installed.\n"
-  printf ""
-  printf "\t- make sure ${BLUE}aws sts get-caller-identity${NC} returns the user/role/account you expect. $AWSCLI_REASON\n"
-fi
-
-printf "\n"
-
 GCLOUD_REASON="It is used if you're deploying to GCP or using Google Workspace data sources."
 if ! gcloud --version &> /dev/null ; then
   printf "${RED}Google Cloud SDK is not installed.${NC} ${GCLOUD_REASON} See https://cloud.google.com/sdk/docs/install\n"
