@@ -1,0 +1,26 @@
+
+
+# this is just a symlink to a log file of your last local build; it does not need to be committed
+last-build.log
+
+# cache of Terraform modules; doesn't need to be under version control
+.terraform/**
+
+# if you wish, commit your IntelliJ IDEA project files to your repo; exclusion is here as this isn't
+# what we want for template repo atm
+.idea
+
+# TODO: when this repo is ready to be used as template Terraform config, everything below should
+# be removed and these files committed to actual config repo IF they exist
+
+terraform.tfvars
+
+# Terraform state - NOTE: for prod use, recommend you use a secure backend, such as S3/GCS for
+# terraform state - not storing state on local disk / repo
+terraform.tfstate**
+.terraform.tfstate.lock.info
+
+# this *SHOULD* be committed to repo for actual configurations, but not to template repo.
+.terraform.lock.hcl
+
+

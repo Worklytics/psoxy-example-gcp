@@ -1,0 +1,33 @@
+# http://editorconfig.org/
+# GitHub respects this file to display their diffs / code reviews if in repo root
+# Seen in https://github.com/isaacs/github/issues/170 as a way to solve the 8 spaces tabs
+# see https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties for everything
+root = true
+
+# NOTE: exception to Google Style, which is generally 80
+[*]
+max_line_length = 100
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_size = tab # sets it to same as `tab_width`
+end_of_line = lf
+
+# https://google.github.io/styleguide/jsguide.html#formatting-block-indentation
+[*.{js,json}]
+indent_style = space
+tab_width = 2
+
+# https://google.github.io/styleguide/htmlcssguide.xml#Indentation
+[*.{html,htm,hbs,css,scss,sql}]
+indent_style = space
+tab_width = 2
+
+# https://developer.hashicorp.com/terraform/language/syntax/style
+[*.{tf,tfvars,hcl}]
+indent_style = space
+tab_width = 2
+
+[*.yaml]
+indent_style = space
+tab_width = 2
