@@ -1,12 +1,13 @@
-# example-google-workspace
-** alpha quality example atm **
+# Psoxy Deployment Example - GCP
 
-A Terraform root module to provision GCP project for Psoxy, configure it, and create necessary infra
-for connections to all supported Google Workspace sources, with state stored to local filesystem.
-As such, it is not appropriate for scenario with multiple developers. As state will contain
-sensitive information (eg, service account keys), care should be taken in production to ensure that
-the filesystem in question is secure or another Terraform backend should be used (eg, GCS bucket
-encrypted with a CMEK).
+** alpha **
+
+[![Latest Release](https://img.shields.io/github/v/release/Worklytics/psoxy-example-gcp)](https://github.com/Worklytics/psoxy-example-gcp/releases/latest)
+![build passing](https://img.shields.io/github/actions/workflow/status/Worklytics/psoxy-example-gcp/terraform_validate.yaml?label=build%20passing)
+
+
+This is a template repo for a Terraform configuration that deploys the [Worklytics pseudonymization
+proxy (psoxy)](https://github.com/Worklytics/psoxy) on GCP.
 
 ## Usage
 
@@ -25,19 +26,15 @@ You'll need:
 See [GitHub's documentation](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template)
 for more details.
 
-1. Clone the git repo containing this example:
+1. Click the 'Use this template' button in the upper right corner of [this page](https://github.com/Worklytics/psoxy-example-gcp).
+    - choose a name for your copy of this repo
+    - leave "Include all branches" unchecked
+
+2. Clone the resulting repo to your machine.  Example command below, just fill in your org and repo
+   names.
+
 ```shell
-
-git clone https://github.com/Worklytics/psoxy.git
-cd psoxy
-```
-
-2. Make a copy of this example for your organization, and go into that directory:
-```shell
-
-cp -r infra/examples/gcp infra/examples/{{YOUR_ORG_NAME}}
-
-cd infra/examples/{{YOUR_ORG_NAME}}
+git clone https://github.com/{{YOUR_ORG_ID}}/{{YOUR_REPO_NAME}}.git
 ```
 
 3. Check your prereqs. Review versions and install anything needed.
