@@ -33,8 +33,8 @@ provider "azuread" {
 }
 
 module "psoxy" {
-  source = "../../modular-examples/gcp"
-  # source = "git::https://github.com/worklytics/psoxy//infra/modular-examples/gcp?ref=v0.4.18"
+  # source = "../../modular-examples/gcp"
+  source = "git::https://github.com/worklytics/psoxy//infra/modular-examples/gcp?ref=v0.4.18"
 
   gcp_project_id                 = var.gcp_project_id
   environment_name               = var.environment_name
