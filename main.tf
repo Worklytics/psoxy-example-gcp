@@ -37,8 +37,8 @@ provider "google" {
 }
 
 module "psoxy" {
-  source = "../../modular-examples/gcp"
-  # source = "git::https://github.com/worklytics/psoxy//infra/modular-examples/gcp?ref=v0.4.20"
+  # source = "../../modular-examples/gcp"
+  source = "git::https://github.com/worklytics/psoxy//infra/modular-examples/gcp?ref=v0.4.20"
 
   gcp_project_id                 = var.gcp_project_id
   environment_id                 = var.environment_id
