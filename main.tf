@@ -39,7 +39,7 @@ locals {
 # be provisioned via Terraform, so doesn't add any dependencies
 # call this 'generic_source_connectors'?
 module "worklytics_connectors" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.25"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.26"
 
 
   enabled_connectors    = var.enabled_connectors
@@ -49,10 +49,30 @@ module "worklytics_connectors" {
   salesforce_domain     = var.salesforce_domain
 }
 
+# sources which require additional dependencies are split into distinct Terraform files, following
+# the naming convention of `{source-identifier}.tf`, eg `msft-365.tf`
+# lines below merge results of those files back into single maps of sources
+
 locals {
   api_connectors = merge(
     module.worklytics_connectors.enabled_api_connectors,
     module.worklytics_connectors_google_workspace.enabled_api_connectors,
+    # local.msft_api_connectors_with_auth,
+    {}
+  )
+
+  source_authorization_todos = concat(
+    module.worklytics_connectors.todos,
+    module.worklytics_connectors_google_workspace.todos,
+    # module.worklytics_connectors_msft_365.todos,
+    []
+  )
+
+  max_auth_todo_step = max(
+    module.worklytics_connectors.next_todo_step,
+    module.worklytics_connectors_google_workspace.next_todo_step,
+    # module.worklytics_connectors_msft_365.next_todo_step,
+    0
   )
 
   bulk_connectors = merge(
@@ -62,7 +82,7 @@ locals {
 }
 
 module "psoxy" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.25"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.26"
 
   gcp_project_id                 = var.gcp_project_id
   environment_name               = var.environment_name
@@ -86,7 +106,9 @@ module "psoxy" {
   custom_bulk_connector_rules    = var.custom_bulk_connector_rules
   lookup_tables                  = var.lookup_tables
   custom_artifacts_bucket_name   = var.custom_artifacts_bucket_name
-  todo_step                      = max(module.worklytics_connectors.next_todo_step, module.worklytics_connectors_google_workspace.next_todo_step)
+  todos_as_local_files           = var.todos_as_local_files
+  todo_step                      = local.max_auth_todo_step
+
 }
 
 locals {
@@ -97,7 +119,7 @@ locals {
 module "connection_in_worklytics" {
   for_each = local.all_instances
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.25"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.26"
 
   psoxy_host_platform_id = local.host_platform_id
   psoxy_instance_id      = each.key
