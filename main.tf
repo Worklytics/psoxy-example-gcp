@@ -39,7 +39,7 @@ locals {
 # be provisioned via Terraform, so doesn't add any dependencies
 # call this 'generic_source_connectors'?
 module "worklytics_connectors" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.26"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.29"
 
 
   enabled_connectors    = var.enabled_connectors
@@ -52,7 +52,6 @@ module "worklytics_connectors" {
 # sources which require additional dependencies are split into distinct Terraform files, following
 # the naming convention of `{source-identifier}.tf`, eg `msft-365.tf`
 # lines below merge results of those files back into single maps of sources
-
 locals {
   api_connectors = merge(
     module.worklytics_connectors.enabled_api_connectors,
@@ -74,7 +73,9 @@ locals {
     # module.worklytics_connectors_msft_365.next_todo_step,
     0
   )
+}
 
+locals {
   bulk_connectors = merge(
     module.worklytics_connectors.enabled_bulk_connectors,
     var.custom_bulk_connectors,
@@ -82,7 +83,7 @@ locals {
 }
 
 module "psoxy" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.26"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.29"
 
   gcp_project_id                 = var.gcp_project_id
   environment_name               = var.environment_name
@@ -94,7 +95,7 @@ module "psoxy" {
   force_bundle                   = var.force_bundle
   install_test_tool              = var.install_test_tool
   gcp_region                     = var.gcp_region
-  replica_regions                = var.replica_regions
+  replica_regions                = coalesce(var.replica_regions, var.gcp_secret_replica_locations)
   api_connectors                 = local.api_connectors
   bulk_connectors                = local.bulk_connectors
   non_production_connectors      = var.non_production_connectors
@@ -108,7 +109,6 @@ module "psoxy" {
   custom_artifacts_bucket_name   = var.custom_artifacts_bucket_name
   todos_as_local_files           = var.todos_as_local_files
   todo_step                      = local.max_auth_todo_step
-
 }
 
 locals {
@@ -119,7 +119,7 @@ locals {
 module "connection_in_worklytics" {
   for_each = local.all_instances
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.26"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.29"
 
   psoxy_host_platform_id = local.host_platform_id
   psoxy_instance_id      = each.key
@@ -162,4 +162,17 @@ output "todos_2" {
 output "todos_3" {
   description = "List of todo steps to complete 3rd, in markdown format."
   value       = var.todos_as_outputs ? join("\n", values(module.connection_in_worklytics)[*].todo) : null
+}
+
+moved {
+  from = module.psoxy.module.secrets["jira-cloud"].google_secret_manager_secret.secret["JIRA_CLOUD_REFRESH_TOKEN"]
+  to   = module.psoxy.module.secrets["jira-cloud"].google_secret_manager_secret.secret["REFRESH_TOKEN"]
+}
+moved {
+  from = module.psoxy.module.secrets["jira-cloud"].google_secret_manager_secret_version.version["JIRA_CLOUD_REFRESH_TOKEN"]
+  to   = module.psoxy.module.secrets["jira-cloud"].google_secret_manager_secret_version.version["REFRESH_TOKEN"]
+}
+moved {
+  from = module.psoxy.module.api_connector["jira-cloud"].google_secret_manager_secret_iam_member.grant_sa_accessor_on_secret["JIRA_CLOUD_REFRESH_TOKEN"]
+  to   = module.psoxy.module.api_connector["jira-cloud"].google_secret_manager_secret_iam_member.grant_sa_accessor_on_secret["REFRESH_TOKEN"]
 }

@@ -1,15 +1,35 @@
 #!/bin/bash
 
-# Psoxy init script
+# Psoxy init script - lite version
+#
+# Usage:
+#   ./tools/release/init-example.sh <repo-root>
 #
 # this is meant to be run from within a Terraform configuration for Psoxy, modeled on one of our
 # examples
-# see: https://github.com/Worklytics/psoxy/tree/main/infra/examples
+#
+# this is a 'thin' version, expected to be duplicated across multiple examples and then leverage
+# that 'terraform init' will do a clone of the repo, in which a longer init script will be provided
+#
+#
+# Testing:
+#   - within example directory, such as `infra/examples/aws-msft-365`:
+#     ../../../tools/init-example.sh ~/code/psoxy
+#
+#   to repeat:
+#     ../../../tools/reset-example.sh
 
 # colors
 RED='\e[0;31m'
 BLUE='\e[0;34m'
 NC='\e[0m' # No Color
+
+
+EXPLICIT_REPO_CLONE_DIR=$1
+
+if [[ "${EXPLICIT_REPO_CLONE_DIR}" != */ ]]; then
+    EXPLICIT_REPO_CLONE_DIR="${EXPLICIT_REPO_CLONE_DIR}/"
+fi
 
 TF_CONFIG_ROOT=`pwd`
 
@@ -23,32 +43,23 @@ printf "Initializing ${BLUE}psoxy${NC} Terraform configuration ...\n"
 terraform init
 
 TF_INIT_EXIT_CODE=$?
-if [ $TF_INIT_EXIT_CODE -ne 0 ]; then
+if [[ $TF_INIT_EXIT_CODE -ne 0 ]]; then
   printf "${RED}Terraform init failed. See above for details. Cannot continue to initialize example configuration.${NC}\n"
   exit 1
 fi
 
-if [ -d ${TF_CONFIG_ROOT}/.terraform/modules/psoxy/ ]; then
-  # use checkout of repo done by Terraform
-  PSOXY_BASE_DIR=${TF_CONFIG_ROOT}/.terraform/modules/psoxy/
+if [[ -z $EXPLICIT_REPO_CLONE_DIR ]]; then
+  if [[ -d ".terraform/modules/psoxy/" ]]; then
+    REPO_CLONE_BASE_DIR=".terraform/modules/psoxy/"
+  else
+    # use checkout of repo on your local machine
+    cd ../../..
+    REPO_CLONE_BASE_DIR="$(pwd)/"
+    cd "${TF_CONFIG_ROOT}" # q: could be just `cd -`, right?
+  fi
 else
-  # use checkout of repo on your local machine
-  cd ../../..
-  PSOXY_BASE_DIR="`pwd`/"
-  cd ${TF_CONFIG_ROOT}
+  REPO_CLONE_BASE_DIR="$EXPLICIT_REPO_CLONE_DIR"
 fi
 
-if [ ! -f terraform.tfvars ]; then
-  printf "Initializing ${BLUE}terraform.tfvars${NC} file for your configuration ...\n"
-
-  TFVARS_FILE="${TF_CONFIG_ROOT}/terraform.tfvars"
-
-  cp ${TF_CONFIG_ROOT}/terraform.tfvars.example.hcl $TFVARS_FILE
-
-  ${PSOXY_BASE_DIR}tools/init-tfvars.sh $TFVARS_FILE $PSOXY_BASE_DIR
-else
-  printf "${RED}Nothing to initialize. File terraform.tfvars already exists.${NC}\n\n"
-fi
-
-# Install test tool
-${PSOXY_BASE_DIR}tools/install-test-tool.sh ${PSOXY_BASE_DIR}tools
+# pass control to the full init script.
+${REPO_CLONE_BASE_DIR}/tools/init-example-full.sh $REPO_CLONE_BASE_DIR
