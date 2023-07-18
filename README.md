@@ -1,7 +1,5 @@
 # Psoxy Deployment Example - GCP
 
-** alpha **
-
 [![Latest Release](https://img.shields.io/github/v/release/Worklytics/psoxy-example-gcp)](https://github.com/Worklytics/psoxy-example-gcp/releases/latest)
 ![build passing](https://img.shields.io/github/actions/workflow/status/Worklytics/psoxy-example-gcp/terraform_validate.yaml?label=build%20passing)
 
