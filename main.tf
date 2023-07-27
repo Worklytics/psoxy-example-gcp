@@ -41,7 +41,6 @@ locals {
 module "worklytics_connectors" {
   source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.31"
 
-
   enabled_connectors        = var.enabled_connectors
   jira_cloud_id             = var.jira_cloud_id
   jira_server_url           = var.jira_server_url
@@ -123,6 +122,7 @@ module "connection_in_worklytics" {
   for_each = local.all_instances
 
   source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.31"
+
 
   psoxy_host_platform_id = local.host_platform_id
   psoxy_instance_id      = each.key
