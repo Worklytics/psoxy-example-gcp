@@ -39,7 +39,7 @@ locals {
 # be provisioned via Terraform, so doesn't add any dependencies
 # call this 'generic_source_connectors'?
 module "worklytics_connectors" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.34"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.36"
 
 
   enabled_connectors            = var.enabled_connectors
@@ -60,21 +60,21 @@ locals {
   api_connectors = merge(
     module.worklytics_connectors.enabled_api_connectors,
     module.worklytics_connectors_google_workspace.enabled_api_connectors,
-    # local.msft_api_connectors_with_auth,
+    local.msft_api_connectors_with_auth,
     {}
   )
 
   source_authorization_todos = concat(
     module.worklytics_connectors.todos,
     module.worklytics_connectors_google_workspace.todos,
-    # module.worklytics_connectors_msft_365.todos,
+    module.worklytics_connectors_msft_365.todos,
     []
   )
 
   max_auth_todo_step = max(
     module.worklytics_connectors.next_todo_step,
     module.worklytics_connectors_google_workspace.next_todo_step,
-    # module.worklytics_connectors_msft_365.next_todo_step,
+    module.worklytics_connectors_msft_365.next_todo_step,
     0
   )
 }
@@ -87,7 +87,7 @@ locals {
 }
 
 module "psoxy" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.34"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.36"
 
   gcp_project_id                  = var.gcp_project_id
   environment_name                = var.environment_name
@@ -124,7 +124,7 @@ locals {
 module "connection_in_worklytics" {
   for_each = local.all_instances
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.34"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.36"
 
   psoxy_host_platform_id = local.host_platform_id
   psoxy_instance_id      = each.key
@@ -169,15 +169,11 @@ output "todos_3" {
   value       = var.todos_as_outputs ? join("\n", values(module.connection_in_worklytics)[*].todo) : null
 }
 
-moved {
-  from = module.psoxy.module.secrets["jira-cloud"].google_secret_manager_secret.secret["JIRA_CLOUD_REFRESH_TOKEN"]
-  to   = module.psoxy.module.secrets["jira-cloud"].google_secret_manager_secret.secret["REFRESH_TOKEN"]
-}
-moved {
-  from = module.psoxy.module.secrets["jira-cloud"].google_secret_manager_secret_version.version["JIRA_CLOUD_REFRESH_TOKEN"]
-  to   = module.psoxy.module.secrets["jira-cloud"].google_secret_manager_secret_version.version["REFRESH_TOKEN"]
-}
-moved {
-  from = module.psoxy.module.api_connector["jira-cloud"].google_secret_manager_secret_iam_member.grant_sa_accessor_on_secret["JIRA_CLOUD_REFRESH_TOKEN"]
-  to   = module.psoxy.module.api_connector["jira-cloud"].google_secret_manager_secret_iam_member.grant_sa_accessor_on_secret["REFRESH_TOKEN"]
-}
+# although should be sensitive such that Terraform won't echo it to command line or expose it, leave
+# commented out in example until needed
+# if you uncomment it, you will then be able to obtain the value through `terraform output --raw pseudonym_salt`
+#output "pseudonym_salt" {
+#  description = "Value used to salt pseudonyms (SHA-256) hashes. If migrate to new deployment, you should copy this value."
+#  value       = module.psoxy.pseudonym_salt
+#  sensitive   = true
+#}
