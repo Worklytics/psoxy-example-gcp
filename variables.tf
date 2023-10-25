@@ -100,6 +100,12 @@ variable "install_test_tool" {
   default     = true
 }
 
+variable "gcp_principals_authorized_to_test" {
+  type        = list(string)
+  description = "list of GCP principals authorized to test this deployment - eg 'user:alice@acme.com', 'group:devs@acme.com'; if omitted, up to you to configure necessary perms for people to test if desired."
+  default     = []
+}
+
 variable "general_environment_variables" {
   type        = map(string)
   description = "environment variables to add for all connectors"
@@ -178,18 +184,19 @@ variable "custom_bulk_connectors" {
     source_kind           = string
     input_bucket_name     = optional(string) # allow override of default bucket name
     sanitized_bucket_name = optional(string) # allow override of default bucket name
-    rules = object({
+    rules = optional(object({
       pseudonymFormat       = optional(string, "URL_SAFE_TOKEN")
       columnsToRedact       = optional(list(string)) # columns to remove from CSV
       columnsToInclude      = optional(list(string)) # if you prefer to include only an explicit list of columns, rather than redacting those you don't want
       columnsToPseudonymize = optional(list(string)) # columns to pseudonymize
       columnsToDuplicate    = optional(map(string))  # columns to create copy of; name --> new name
       columnsToRename       = optional(map(string))  # columns to rename: original name --> new name; renames applied BEFORE pseudonymization
-      fieldsToTransform     = optional(map(object({
-        newName = string
+      fieldsToTransform = optional(map(object({
+        newName    = string
         transforms = optional(list(map(string)), [])
       })))
-    })
+    }))
+    rules_file          = optional(string)
     settings_to_provide = optional(map(string), {})
   }))
   description = "specs of custom bulk connectors to create"
@@ -212,12 +219,12 @@ variable "custom_bulk_connector_rules" {
   type = map(object({
     pseudonymFormat       = optional(string, "URL_SAFE_TOKEN")
     columnsToRedact       = optional(list(string), []) # columns to remove from CSV
-    columnsToInclude      = optional(list(string)) # if you prefer to include only an explicit list of columns, rather than redacting those you don't want
+    columnsToInclude      = optional(list(string))     # if you prefer to include only an explicit list of columns, rather than redacting those you don't want
     columnsToPseudonymize = optional(list(string), []) # columns to pseudonymize
-    columnsToDuplicate    = optional(map(string))  # columns to create copy of; name --> new name
-    columnsToRename       = optional(map(string))  # columns to rename: original name --> new name; renames applied BEFORE pseudonymization
-    fieldsToTransform     = optional(map(object({
-      newName = string
+    columnsToDuplicate    = optional(map(string))      # columns to create copy of; name --> new name
+    columnsToRename       = optional(map(string))      # columns to rename: original name --> new name; renames applied BEFORE pseudonymization
+    fieldsToTransform = optional(map(object({
+      newName    = string
       transforms = optional(list(map(string)), [])
     })))
   }))
