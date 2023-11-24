@@ -1,7 +1,7 @@
 # BEGIN MSFT
 
 module "worklytics_connectors_msft_365" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors-msft-365?ref=rc-v0.4.36"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors-msft-365?ref=v0.4.41"
 
 
   enabled_connectors     = var.enabled_connectors
