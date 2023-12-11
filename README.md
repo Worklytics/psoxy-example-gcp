@@ -43,16 +43,17 @@ git clone https://github.com/{{YOUR_ORG_ID}}/{{YOUR_REPO_NAME}}.git
 
 4. Authenticate your tools as needed:
 
-- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) - `aws get-caller-identity` should work and return your expected account/user
-- if plan to get data from Google Workspace, auth [GCloud CLI](https://cloud.google.com/sdk/docs/authorizing) - `gcloud auth login` to authenticate, then `gcloud auth list` to verify you have expected account/user
+  - auth [GCloud CLI](https://cloud.google.com/sdk/docs/authorizing) - `gcloud auth login` to authenticate, then `gcloud auth list` to verify you have expected account/user
+  - auth [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli) if using Microsoft 365 data sources  - `az login --allow-no-subscription` to authenticate, then `az account list` to verify you have expected account/user
 
-5. Initialize your configuration
+5. Initialize your configuration using our helper script. Follow the prompts.
 
 ```shell
 ./init
 ```
 
-6. Review your `terraform.tfvars` file; customize as needed (eg, comment out datasources you don't need).
+6. Review your `terraform.tfvars` file; customize as needed (eg, comment out data sources you don't
+   need, verify configuration options).
 
 7. Run `terraform plan` and review results to understand what will be created. Customize your
    `terraform.tfvars` or `main.tf` file if needed.
