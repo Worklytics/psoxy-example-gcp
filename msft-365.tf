@@ -1,7 +1,7 @@
 # BEGIN MSFT
 
 module "worklytics_connectors_msft_365" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors-msft-365?ref=v0.4.43"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors-msft-365?ref=v0.4.46"
 
 
   enabled_connectors                  = var.enabled_connectors
@@ -30,7 +30,7 @@ locals {
 module "msft-connection-auth-federation" {
   for_each = module.worklytics_connectors_msft_365.enabled_api_connectors
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/azuread-federated-credentials?ref=v0.4.43"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/azuread-federated-credentials?ref=v0.4.46"
 
   application_object_id = each.value.connector.id
   display_name          = "GcpFederation"
