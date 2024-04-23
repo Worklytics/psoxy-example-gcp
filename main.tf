@@ -1,4 +1,6 @@
 terraform {
+  required_version = ">= 1.3, < 1.8"
+
   required_providers {
     google = {
       version = ">= 3.74, <= 5.0"
@@ -26,7 +28,7 @@ locals {
 # be provisioned via Terraform, so doesn't add any dependencies
 # call this 'generic_source_connectors'?
 module "worklytics_connectors" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.51"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.52"
 
 
   enabled_connectors               = var.enabled_connectors
@@ -77,7 +79,7 @@ locals {
 }
 
 module "psoxy" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.51"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.52"
 
   gcp_project_id                    = var.gcp_project_id
   environment_name                  = var.environment_name
@@ -97,6 +99,7 @@ module "psoxy" {
   custom_api_connector_rules        = var.custom_api_connector_rules
   general_environment_variables     = var.general_environment_variables
   pseudonymize_app_ids              = var.pseudonymize_app_ids
+  email_canonicalization            = var.email_canonicalization
   bulk_input_expiration_days        = var.bulk_input_expiration_days
   bulk_sanitized_expiration_days    = var.bulk_sanitized_expiration_days
   custom_bulk_connector_rules       = var.custom_bulk_connector_rules
@@ -115,7 +118,7 @@ locals {
 module "connection_in_worklytics" {
   for_each = local.all_instances
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.51"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.52"
 
   psoxy_host_platform_id = local.host_platform_id
   psoxy_instance_id      = each.key
