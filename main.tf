@@ -28,7 +28,7 @@ locals {
 # be provisioned via Terraform, so doesn't add any dependencies
 # call this 'generic_source_connectors'?
 module "worklytics_connectors" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.54"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.55"
 
 
   enabled_connectors               = var.enabled_connectors
@@ -79,7 +79,7 @@ locals {
 }
 
 module "psoxy" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.54"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.55"
 
   gcp_project_id                    = var.gcp_project_id
   environment_name                  = var.environment_name
@@ -118,7 +118,7 @@ locals {
 module "connection_in_worklytics" {
   for_each = local.all_instances
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.54"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.55"
 
   psoxy_host_platform_id = local.host_platform_id
   psoxy_instance_id      = each.key
@@ -149,7 +149,8 @@ output "todos_1" {
   value = var.todos_as_outputs ? join("\n",
     concat(
       module.worklytics_connectors.todos,
-      module.worklytics_connectors_google_workspace.todos
+      module.worklytics_connectors_google_workspace.todos,
+      []
   )) : null
 }
 
