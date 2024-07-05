@@ -1,8 +1,7 @@
 # BEGIN MSFT
 
 module "worklytics_connectors_msft_365" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors-msft-365?ref=v0.4.55"
-
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors-msft-365?ref=v0.4.56"
 
   enabled_connectors                  = var.enabled_connectors
   environment_id                      = var.environment_name
@@ -14,6 +13,7 @@ module "worklytics_connectors_msft_365" {
   msft_teams_example_chat_guid        = var.msft_teams_example_chat_guid
   msft_teams_example_call_guid        = var.msft_teams_example_call_guid
   msft_teams_example_call_record_guid = var.msft_teams_example_call_record_guid
+  msft_connector_app_object_id        = var.msft_connector_app_object_id
   todos_as_local_files                = var.todos_as_local_files
   todo_step                           = 1
 }
@@ -31,7 +31,7 @@ locals {
 module "msft-connection-auth-federation" {
   for_each = module.worklytics_connectors_msft_365.enabled_api_connectors
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/azuread-federated-credentials?ref=v0.4.55"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/azuread-federated-credentials?ref=v0.4.56"
 
   application_object_id = each.value.connector.id
   display_name          = "GcpFederation"
