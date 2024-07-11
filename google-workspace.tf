@@ -7,7 +7,7 @@ provider "google" {
 
 
 module "worklytics_connectors_google_workspace" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors-google-workspace?ref=v0.4.56"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors-google-workspace?ref=v0.4.57"
 
   providers = {
     google = google.google_workspace
