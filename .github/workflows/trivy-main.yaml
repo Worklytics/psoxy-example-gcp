@@ -39,4 +39,5 @@ jobs:
         uses: peter-murray/github-security-report-action@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          sarifReportDir: './'
 
