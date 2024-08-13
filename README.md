@@ -2,7 +2,7 @@
 
 [![Latest Release](https://img.shields.io/github/v/release/Worklytics/psoxy-example-gcp)](https://github.com/Worklytics/psoxy-example-gcp/releases/latest)
 ![build passing](https://img.shields.io/github/actions/workflow/status/Worklytics/psoxy-example-gcp/terraform_validate.yaml?label=build%20passing)
-
+![tfsec](https://img.shields.io/github/actions/workflow/status/Worklytics/psoxy-example-gcp/tfsec.yml?label=tfsec)
 
 This is a template repo for a Terraform configuration that deploys the [Worklytics pseudonymization
 proxy (psoxy)](https://github.com/Worklytics/psoxy) on GCP.
@@ -138,4 +138,3 @@ example tutorials it contains are each subject to their own license terms.
 
 This example repo is maintained by [Worklytics](https://worklytics.co). Paid support is available.
 Please contact [sales@worklytics.co](mailto:sales@worklytics.co).
-

@@ -1,0 +1,21 @@
+name: 'tfsec'
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  tfsec:
+    name: tfsec
+    runs-on: ubuntu-latest
+
+    # q: what version of Terraform does this use??
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3
+
+        # see: https://github.com/aquasecurity/tfsec-action
+      - name: tfsec
+        uses: aquasecurity/tfsec-action@v1.0.0
