@@ -1,0 +1,48 @@
+name: 'static security scan - Trivy + tfsec'
+
+# scans 'main' branch for vulnerabilities; pushes results to GitHub Security tab
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  tfsec:
+    name: tfsec
+    runs-on: ubuntu-latest
+
+    # q: what version of Terraform does this use??
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3
+
+        # see: https://github.com/aquasecurity/tfsec-action
+      - name: tfsec
+        uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          format: 'sarif'
+          softfail: true
+
+      - name: Upload tfsec scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'tfsec-results.sarif'
+
+      # see: https://github.com/aquasecurity/trivy-action
+      - name: Run Trivy vulnerability scanner in IaC mode
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: 'config'
+          hide-progress: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
