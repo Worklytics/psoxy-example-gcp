@@ -5,7 +5,7 @@ name: 'static security scan - Trivy + tfsec'
 on:
   push:
     branches:
-      - 'main'
+      - '**'
 
 jobs:
   tfsec:

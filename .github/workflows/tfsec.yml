@@ -25,4 +25,4 @@ jobs:
         with:
           scan-type: 'config'
           hide-progress: true
-          format: 'github'
+          format: 'sarif'
