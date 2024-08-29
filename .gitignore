@@ -13,14 +13,14 @@ last-build.log
 # TODO: when this repo is ready to be used as template Terraform config, everything below should
 # be removed and these files committed to actual config repo IF they exist
 
-terraform.tfvars
+#terraform.tfvars
 
 # Terraform state - NOTE: for prod use, recommend you use a secure backend, such as S3/GCS for
 # terraform state - not storing state on local disk / repo
-terraform.tfstate**
-.terraform.tfstate.lock.info
+#terraform.tfstate**
+#.terraform.tfstate.lock.info
 
 # this *SHOULD* be committed to repo for actual configurations, but not to template repo.
-.terraform.lock.hcl
+#.terraform.lock.hcl
 
 

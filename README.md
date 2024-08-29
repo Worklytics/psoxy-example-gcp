@@ -2,7 +2,7 @@
 
 [![Latest Release](https://img.shields.io/github/v/release/Worklytics/psoxy-example-gcp)](https://github.com/Worklytics/psoxy-example-gcp/releases/latest)
 ![build passing](https://img.shields.io/github/actions/workflow/status/Worklytics/psoxy-example-gcp/terraform_validate.yaml?label=build%20passing)
-
+![tfsec](https://img.shields.io/github/actions/workflow/status/Worklytics/psoxy-example-gcp/tfsec.yml?label=tfsec)
 
 This is a template repo for a Terraform configuration that deploys the [Worklytics pseudonymization
 proxy (psoxy)](https://github.com/Worklytics/psoxy) on GCP.
@@ -52,17 +52,89 @@ git clone https://github.com/{{YOUR_ORG_ID}}/{{YOUR_REPO_NAME}}.git
 ./init
 ```
 
-6. Review your `terraform.tfvars` file; customize as needed (eg, comment out data sources you don't
-   need, verify configuration options).
+
+6. Review your `terraform.tfvars` file and `main.tf`; customize as needed (eg, comment out
+   datasources you don't need).
+
+   In particular, if you're NOT using Google Workspace as a data source, remove (delete) the `.tf`
+   files named `google-*.tf` AND references to values from those files from the `main.tf` file.
+   (Our `./init` script *should* have removed these for you)
+
+   Similiarly, if you're NOT using Microsoft 365 as a data source, remove (delete) the `.tf`
+   files named `msft-365-*.tf` AND references to values from those files from the `main.tf` file.
+   (Our `./init` script *should* have removed these for you)
+
 
 7. Run `terraform plan` and review results to understand what will be created. Customize your
-   `terraform.tfvars` or `main.tf` file if needed.
+   `terraform.tfvars` or `main.tf` file if needed. (or push to your CI/CD system, if not running
+   locally)
 
 ```shell
 terraform plan
 ```
 
-8. Run `terraform apply` to create the resources.
+8. Run `terraform apply` to create the resources. (or push to your CI/CD system to do this
+   automatically)
 ```shell
 terraform apply
 ```
+
+9. The above steps have created or modified various files that you should commit a code repository
+   or otherwise preserve. In particular `terraform.tfvars`, `main.tf`, `terraform.tfstate` (if you
+   ran `terraform` locally) and `.terraform.lock.hcl` should be preserved. Please do `git add` for
+   each and then `git commit` to save your changes.
+
+## License
+
+The source code contained in this repo is licensed under the [Apache License, Version 2.0](LICENSE).
+
+Usage of terraform, psoxy, or other tooling invoked by scripts in this repo or described in the
+example tutorials it contains are each subject to their own license terms.
+
+## Support
+
+This example repo is maintained by [Worklytics](https://worklytics.co). Paid support is available.
+Please contact [sales@worklytics.co](mailto:sales@worklytics.co).
+
+6. Review your `terraform.tfvars` file and `main.tf`; customize as needed (eg, comment out
+   datasources you don't need).
+
+   In particular, if you're NOT using Google Workspace as a data source, remove (delete) the `.tf`
+   files named `google-*.tf` AND references to values from those files from the `main.tf` file.
+   (Our `./init` script *should* have removed these for you)
+
+   Similiarly, if you're NOT using Microsoft 365 as a data source, remove (delete) the `.tf`
+   files named `msft-365-*.tf` AND references to values from those files from the `main.tf` file.
+   (Our `./init` script *should* have removed these for you)
+
+
+7. Run `terraform plan` and review results to understand what will be created. Customize your
+   `terraform.tfvars` or `main.tf` file if needed. (or push to your CI/CD system, if not running
+   locally)
+
+```shell
+terraform plan
+```
+
+8. Run `terraform apply` to create the resources. (or push to your CI/CD system to do this
+   automatically)
+```shell
+terraform apply
+```
+
+9. The above steps have created or modified various files that you should commit a code repository
+   or otherwise preserve. In particular `terraform.tfvars`, `main.tf`, `terraform.tfstate` (if you
+   ran `terraform` locally) and `.terraform.lock.hcl` should be preserved. Please do `git add` for
+   each and then `git commit` to save your changes.
+
+## License
+
+The source code contained in this repo is licensed under the [Apache License, Version 2.0](LICENSE).
+
+Usage of terraform, psoxy, or other tooling invoked by scripts in this repo or described in the
+example tutorials it contains are each subject to their own license terms.
+
+## Support
+
+This example repo is maintained by [Worklytics](https://worklytics.co). Paid support is available.
+Please contact [sales@worklytics.co](mailto:sales@worklytics.co).
