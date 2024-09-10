@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.3, < 1.8"
+  required_version = ">= 1.3, < 1.10"
 
   required_providers {
     google = {
@@ -28,7 +28,7 @@ locals {
 # be provisioned via Terraform, so doesn't add any dependencies
 # call this 'generic_source_connectors'?
 module "worklytics_connectors" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.57"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.59"
 
 
   enabled_connectors               = var.enabled_connectors
@@ -79,7 +79,7 @@ locals {
 }
 
 module "psoxy" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.57"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.59"
 
   gcp_project_id                    = var.gcp_project_id
   environment_name                  = var.environment_name
@@ -118,7 +118,7 @@ locals {
 module "connection_in_worklytics" {
   for_each = local.all_instances
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.57"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.59"
 
   psoxy_host_platform_id = local.host_platform_id
   psoxy_instance_id      = each.key
