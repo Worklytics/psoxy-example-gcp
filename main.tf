@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     google = {
-      version = ">= 3.74, <= 5.0"
+      version = "~> 5.0" # TODO: actually go to 6.0 for proxy v0.5
     }
   }
 
@@ -28,8 +28,7 @@ locals {
 # be provisioned via Terraform, so doesn't add any dependencies
 # call this 'generic_source_connectors'?
 module "worklytics_connectors" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.4.62"
-
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.5.0"
 
   enabled_connectors               = var.enabled_connectors
   jira_cloud_id                    = var.jira_cloud_id
@@ -79,7 +78,7 @@ locals {
 }
 
 module "psoxy" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.4.62"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.5.0"
 
   gcp_project_id                    = var.gcp_project_id
   environment_name                  = var.environment_name
@@ -92,7 +91,7 @@ module "psoxy" {
   install_test_tool                 = var.install_test_tool
   gcp_principals_authorized_to_test = var.gcp_principals_authorized_to_test
   gcp_region                        = var.gcp_region
-  replica_regions                   = coalesce(var.replica_regions, var.gcp_secret_replica_locations)
+  secret_replica_locations          = var.secret_replica_locations
   api_connectors                    = local.api_connectors
   bulk_connectors                   = local.bulk_connectors
   non_production_connectors         = var.non_production_connectors
@@ -118,14 +117,14 @@ locals {
 module "connection_in_worklytics" {
   for_each = local.all_instances
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.4.62"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.5.0"
 
-  psoxy_host_platform_id = local.host_platform_id
-  psoxy_instance_id      = each.key
-  worklytics_host        = var.worklytics_host
-  connector_id           = try(local.all_connectors[each.key].worklytics_connector_id, "")
-  display_name           = try(local.all_connectors[each.key].worklytics_connector_name, "${local.all_connectors[each.key].display_name} via Psoxy")
-  todo_step              = module.psoxy.next_todo_step
+  host_platform_id  = local.host_platform_id
+  proxy_instance_id = each.key
+  worklytics_host   = var.worklytics_host
+  connector_id      = try(local.all_connectors[each.key].worklytics_connector_id, "")
+  display_name      = try(local.all_connectors[each.key].worklytics_connector_name, "${local.all_connectors[each.key].display_name} via Psoxy")
+  todo_step         = module.psoxy.next_todo_step
 
   settings_to_provide = merge(
     # Source API case

@@ -1,7 +1,7 @@
 # BEGIN MSFT
 
 module "worklytics_connectors_msft_365" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors-msft-365?ref=v0.4.62"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors-msft-365?ref=v0.5.0"
 
   enabled_connectors                         = var.enabled_connectors
   environment_id                             = var.environment_name
@@ -32,13 +32,13 @@ locals {
 module "msft-connection-auth-federation" {
   for_each = module.worklytics_connectors_msft_365.enabled_api_connectors
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/azuread-federated-credentials?ref=v0.4.62"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/azuread-federated-credentials?ref=v0.5.0"
 
-  application_object_id = each.value.connector.id
-  display_name          = "GcpFederation"
-  description           = "Federation to be used for psoxy Connector - ${each.value.display_name}${local.env_qualifier}"
-  issuer                = "https://accounts.google.com"
-  subject               = module.psoxy.api_connector_gcp_execution_service_accounts[each.key].unique_id
+  application_id = each.value.connector.id
+  display_name   = "GcpFederation"
+  description    = "Federation to be used for psoxy Connector - ${each.value.display_name}${local.env_qualifier}"
+  issuer         = "https://accounts.google.com"
+  subject        = module.psoxy.api_connector_gcp_execution_service_accounts[each.key].unique_id
 }
 
 locals {
