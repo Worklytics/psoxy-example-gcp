@@ -28,7 +28,7 @@ locals {
 # be provisioned via Terraform, so doesn't add any dependencies
 # call this 'generic_source_connectors'?
 module "worklytics_connectors" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.5.1"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.5.2"
 
   enabled_connectors               = var.enabled_connectors
   jira_cloud_id                    = var.jira_cloud_id
@@ -39,6 +39,7 @@ module "worklytics_connectors" {
   github_enterprise_server_host    = var.github_enterprise_server_host
   github_enterprise_server_version = var.github_enterprise_server_version
   github_installation_id           = var.github_installation_id
+  github_copilot_installation_id   = var.github_copilot_installation_id
   github_organization              = var.github_organization
   github_example_repository        = var.github_example_repository
   salesforce_example_account_id    = var.salesforce_example_account_id
@@ -78,7 +79,7 @@ locals {
 }
 
 module "psoxy" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.5.1"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.5.2"
 
   gcp_project_id                    = var.gcp_project_id
   environment_name                  = var.environment_name
@@ -117,7 +118,7 @@ locals {
 module "connection_in_worklytics" {
   for_each = local.all_instances
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.5.1"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.5.2"
 
   host_platform_id  = local.host_platform_id
   proxy_instance_id = each.key
