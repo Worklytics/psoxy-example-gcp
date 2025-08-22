@@ -110,6 +110,16 @@ variable "general_environment_variables" {
   type        = map(string)
   description = "environment variables to add for all connectors"
   default     = {}
+
+  validation {
+    condition     = !contains(keys(var.general_environment_variables), "IS_DEVELOPMENT_MODE")
+    error_message = "Cannot pass IS_DEVELOPMENT_MODE as a general environment variable; add connector id to `non_production_connectors` instead."
+  }
+
+  validation {
+    condition     = !contains(keys(var.general_environment_variables), "EMAIL_CANONICALIZATION")
+    error_message = "Use `email_canonicalization` instead of passing EMAIL_CANONICALIZATION as a general environment variable."
+  }
 }
 
 variable "pseudonymize_app_ids" {
@@ -122,6 +132,11 @@ variable "email_canonicalization" {
   type        = string
   description = "defines how email address are processed prior to hashing, hence which are considered 'canonically equivalent'; one of 'STRICT' (default and most standard compliant) or 'IGNORE_DOTS' (probably most in line with user expectations)"
   default     = "IGNORE_DOTS"
+
+  validation {
+    condition     = var.email_canonicalization == "STRICT" || var.email_canonicalization == "IGNORE_DOTS"
+    error_message = "`email_canonicalization` must be one of 'STRICT' or 'IGNORE_DOTS'."
+  }
 }
 
 variable "gcp_region" {
@@ -129,6 +144,57 @@ variable "gcp_region" {
   description = "Region in which to provision GCP resources, if applicable"
   default     = "us-central1"
 }
+
+variable "vpc_config" {
+  type = object({
+    network                         = optional(string)                # Local name of the VPC network resource on which to provision the VPC connector (if `serverless_connector` is not provided)
+    subnetwork                      = optional(string)                # Local name of the VPC subnetwork resource on which to provision the VPC connector (if `serverless_connector` is not provided)
+    serverless_connector            = optional(string)                # Format: projects/{project}/locations/{location}/connectors/{connector}
+    serverless_connector_cidr_range = optional(string, "10.8.0.0/28") # ignored if serverless_connector is provided
+  })
+
+  description = "**alpha** configuration of a VPC to be used by the Psoxy instances, if any (null for none)."
+  default     = null
+
+  # serverless_connector: allow null; if provided, must match the full resource name
+  validation {
+    condition = (
+      var.vpc_config == null
+      || try(var.vpc_config.serverless_connector, null) == null
+      || can(regex("^projects/[^/]+/locations/[^/]+/connectors/[^/]+$", try(var.vpc_config.serverless_connector, "")))
+    )
+    error_message = "If vpc_config.serverless_connector is provided, it must match the format: projects/{project}/locations/{location}/connectors/{connector}"
+  }
+
+  # serverless_connector_cidr_range: allow null; if provided, must look like CIDR
+  validation {
+    condition = (
+      var.vpc_config == null
+      || try(var.vpc_config.serverless_connector_cidr_range, null) == null
+      || can(regex("^[0-9.]+/[0-9]+$", try(var.vpc_config.serverless_connector_cidr_range, "")))
+    )
+    error_message = "If vpc_config.serverless_connector_cidr_range is provided, it must match the format: {ip}/{mask}"
+  }
+
+  validation {
+    condition = (
+      var.vpc_config == null
+      || try(var.vpc_config.network, null) == null
+      || can(regex("^[a-z0-9-]+$", try(var.vpc_config.network, "")))
+    )
+    error_message = "vpc_config.network must be lowercase letters, numbers, or dashes."
+  }
+
+  validation {
+    condition = (
+      var.vpc_config == null
+      || try(var.vpc_config.network, null) != null
+      || try(var.vpc_config.serverless_connector, null) != null
+    )
+    error_message = "If vpc_config is provided, it must either specify a serverless_connector or a network on which to provision a serverless connector."
+  }
+}
+
 
 
 variable "secret_replica_locations" {
