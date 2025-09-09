@@ -19,7 +19,7 @@ You'll need:
 - the [prerequisites for Psoxy](https://github.com/Worklytics/psoxy/blob/v0.4.37/README.md#prerequisites)
   itself, although this example will attempt to help you check those
 
-### Setup
+### Setup using this template
 
 See [GitHub's documentation](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template)
 for more details.
@@ -28,14 +28,37 @@ for more details.
     - choose a name for your copy of this repo
     - leave "Include all branches" unchecked
 
-2. Clone the resulting repo to your machine.  Example command below, just fill in your org and repo
-   names.
+Clone the resulting repo to your machine.  Example command below, just fill in your org and repo names.
 
 ```shell
 git clone https://github.com/{{YOUR_ORG_ID}}/{{YOUR_REPO_NAME}}.git
 ```
 
-3. Check your prereqs. Review versions and install anything needed.
+1a. **Manual template setup** (if you *cannot* 'Use this template', perhaps because your organization doesn't use GitHub or you need to use a different git host, you can manually create a copy:
+   - Clone this repository to your local machine:
+     ```shell
+     git clone https://github.com/Worklytics/psoxy-example-gcp.git
+     cd psoxy-example-gcp
+     ```
+   - Remove the existing git history to start fresh:
+     ```shell
+     rm -rf .git
+     ```
+   - Initialize a new git repository:
+     ```shell
+     git init
+     git add .
+     git commit -m "Initial commit from psoxy-example-gcp template"
+     ```
+   - Create a new repository on your preferred git hosting service (GitLab, Bitbucket, etc.)
+   - Add your new repository as the remote origin:
+     ```shell
+     git remote add origin https://your-git-host.com/your-org/your-repo-name.git
+     git branch -M main
+     git push -u origin main
+     ```
+
+2. Check your prereqs. Review versions and install anything needed.
 
 ```shell
 ./check-prereqs
@@ -52,49 +75,6 @@ git clone https://github.com/{{YOUR_ORG_ID}}/{{YOUR_REPO_NAME}}.git
 ./init
 ```
 
-
-6. Review your `terraform.tfvars` file and `main.tf`; customize as needed (eg, comment out
-   datasources you don't need).
-
-   In particular, if you're NOT using Google Workspace as a data source, remove (delete) the `.tf`
-   files named `google-*.tf` AND references to values from those files from the `main.tf` file.
-   (Our `./init` script *should* have removed these for you)
-
-   Similiarly, if you're NOT using Microsoft 365 as a data source, remove (delete) the `.tf`
-   files named `msft-365-*.tf` AND references to values from those files from the `main.tf` file.
-   (Our `./init` script *should* have removed these for you)
-
-
-7. Run `terraform plan` and review results to understand what will be created. Customize your
-   `terraform.tfvars` or `main.tf` file if needed. (or push to your CI/CD system, if not running
-   locally)
-
-```shell
-terraform plan
-```
-
-8. Run `terraform apply` to create the resources. (or push to your CI/CD system to do this
-   automatically)
-```shell
-terraform apply
-```
-
-9. The above steps have created or modified various files that you should commit a code repository
-   or otherwise preserve. In particular `terraform.tfvars`, `main.tf`, `terraform.tfstate` (if you
-   ran `terraform` locally) and `.terraform.lock.hcl` should be preserved. Please do `git add` for
-   each and then `git commit` to save your changes.
-
-## License
-
-The source code contained in this repo is licensed under the [Apache License, Version 2.0](LICENSE).
-
-Usage of terraform, psoxy, or other tooling invoked by scripts in this repo or described in the
-example tutorials it contains are each subject to their own license terms.
-
-## Support
-
-This example repo is maintained by [Worklytics](https://worklytics.co). Paid support is available.
-Please contact [sales@worklytics.co](mailto:sales@worklytics.co).
 
 6. Review your `terraform.tfvars` file and `main.tf`; customize as needed (eg, comment out
    datasources you don't need).
