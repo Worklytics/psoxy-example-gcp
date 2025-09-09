@@ -19,7 +19,7 @@ You'll need:
 - the [prerequisites for Psoxy](https://github.com/Worklytics/psoxy/blob/v0.4.37/README.md#prerequisites)
   itself, although this example will attempt to help you check those
 
-### Setup using this template
+### Setup
 
 See [GitHub's documentation](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template)
 for more details.
