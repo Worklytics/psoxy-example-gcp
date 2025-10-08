@@ -13,8 +13,8 @@ This is a template repo for a Terraform configuration that deploys the [Worklyti
 You'll need:
 - a Bash-like shell environment on Linux, MacOS, or [WSL on Windows](https://learn.microsoft.com/en-us/windows/wsl/install).
 - [`git` installed](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), although it is usually included on those platforms (check with `git --version`).
-- an GCP project account and credentials, as described in [Psoxy's Getting Started - GCP docs](https://github.com/Worklytics/psoxy/blob/v0.4.37/docs/gcp/getting-started.md)
-- the [prerequisites for Psoxy](https://github.com/Worklytics/psoxy/blob/v0.4.37/README.md#prerequisites) itself, although this example will attempt to help you check those
+- an GCP project account and credentials, as described in [Psoxy's Getting Started - GCP docs](https://github.com/Worklytics/psoxy/blob/v0.5.9/docs/gcp/getting-started.md)
+- the [prerequisites for Psoxy](https://github.com/Worklytics/psoxy/blob/v0.5.9/README.md#prerequisites) itself, although this example will attempt to help you check those
 
 ### Setup
 
@@ -30,7 +30,7 @@ Clone the resulting repo to your machine.  Example command below, just fill in y
 git clone https://github.com/{{YOUR_ORG_ID}}/{{YOUR_REPO_NAME}}.git
 ```
 
-1a. **Manual template setup** (if you *cannot* 'Use this template', perhaps because your organization doesn't use GitHub or you need to use a different git host, you can manually create a copy:
+- Alternatively **use template outside GitHub** (if you *cannot* 'Use this template', perhaps because your organization doesn't use GitHub or you need to use a different git host, you can manually create a copy:
    - Clone this repository to your local machine:
      ```shell
      git clone https://github.com/Worklytics/psoxy-example-gcp.git
@@ -54,6 +54,14 @@ git clone https://github.com/{{YOUR_ORG_ID}}/{{YOUR_REPO_NAME}}.git
      git push -u origin main
      ```
 
+- Alternatively, **use this in a monorepo** (eg, you maintain have a monorepo with lots of terraform configurations, and you want to add this to those)
+  - Clone this repository to your local machine and copy its contents (excluding hidden stuff like `.git` files into your monorepo)
+     ```shell
+     git clone https://github.com/Worklytics/psoxy-example-gcp.git
+     rm -rf psoxy-example-gcp/.git
+     cp -r psoxy-example-gcp ${PATH_TO_MONO_REPO}/
+     ```
+
 2. Check your prereqs. Review versions and install anything needed.
 
 ```shell
@@ -62,8 +70,8 @@ git clone https://github.com/{{YOUR_ORG_ID}}/{{YOUR_REPO_NAME}}.git
 
 4. Authenticate your tools as needed:
 
-  - auth [GCloud CLI](https://cloud.google.com/sdk/docs/authorizing) - `gcloud auth login` to authenticate, then `gcloud auth list` to verify you have expected account/user
-  - auth [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli) if using Microsoft 365 data sources  - `az login --allow-no-subscription` to authenticate, then `az account list` to verify you have expected account/user
+  - auth [GCloud CLI](https://cloud.google.com/sdk/docs/authorizing) - `gcloud auth login` to authenticate, then `gcloud auth list` to verify you have the expected account/user
+  - auth [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli) if using Microsoft 365 data sources  - `az login --allow-no-subscription` to authenticate, then `az account list` to verify you have the expected account/user
 
 5. Initialize your configuration using our helper script. Follow the prompts.
 

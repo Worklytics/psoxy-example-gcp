@@ -28,7 +28,7 @@ locals {
 # be provisioned via Terraform, so doesn't add any dependencies
 # call this 'generic_source_connectors'?
 module "worklytics_connectors" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.5.9"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.5.10"
 
   enabled_connectors                       = var.enabled_connectors
   chat_gpt_enterprise_example_workspace_id = var.chat_gpt_enterprise_example_workspace_id
@@ -83,7 +83,7 @@ locals {
 }
 
 module "psoxy" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.5.9"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.5.10"
 
   gcp_project_id                    = var.gcp_project_id
   environment_name                  = var.environment_name
@@ -121,6 +121,7 @@ module "psoxy" {
   todos_as_local_files            = var.todos_as_local_files
   todo_step                       = local.max_auth_todo_step
   bucket_force_destroy            = var.bucket_force_destroy
+  tf_gcp_principal_email          = var.gcp_terraform_sa_account_email
 }
 
 locals {
@@ -131,7 +132,7 @@ locals {
 module "connection_in_worklytics" {
   for_each = local.all_instances
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.5.9"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-psoxy-connection-generic?ref=v0.5.10"
 
   host_platform_id  = local.host_platform_id
   proxy_instance_id = each.key
