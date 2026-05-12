@@ -69,7 +69,7 @@ This example repository provides:
 
 ## Important Notes
 
-- This is a **template repository** - users should create their own copy, not commit directly to this repo
+- This is a **template repository** - users should create their own copy and commit customization changes there, rather than committing those changes to the upstream template repo
 - **Version compatibility**: The Terraform modules reference specific Psoxy release tags
 - **GCP-specific**: This example is for Google Cloud Platform deployments; see `psoxy-example-aws` for AWS
 - **Security**: Users must configure authentication credentials and IAM permissions appropriately
