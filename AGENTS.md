@@ -2,7 +2,7 @@
 
 ## What is This Repository?
 
-This is a **Terraform template repository** for deploying the [Worklytics Pseudonymizing Proxy (Psoxy)](https://github.com/Worklytics/psoxy) on **Google Cloud Platform (GCP)**.
+This is a **Terraform template repository** for deploying the [Worklytics Pseudonymizing Proxy (Psoxy)](https://github.com/Worklytics/psoxy) on **Google Cloud Platform (GCP)**. 
 
 Psoxy is a serverless, pseudonymizing Data Loss Prevention (DLP) layer that sits between Worklytics and your organization's data sources (SaaS APIs, cloud storage, etc.). It replaces PII with hash tokens, enabling analysis on anonymized data while enforcing access controls and compliance requirements.
 
@@ -69,7 +69,7 @@ This example repository provides:
 
 ## Important Notes
 
-- This is a **template repository** - users should create their own copy and commit customization changes there, rather than committing those changes to the upstream template repo
+- This is a **template repository** - users should create their own copy, not commit directly to this repo
 - **Version compatibility**: The Terraform modules reference specific Psoxy release tags
 - **GCP-specific**: This example is for Google Cloud Platform deployments; see `psoxy-example-aws` for AWS
 - **Security**: Users must configure authentication credentials and IAM permissions appropriately
