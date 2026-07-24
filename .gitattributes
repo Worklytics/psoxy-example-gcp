@@ -1,0 +1,10 @@
+# Shell scripts must stay LF; CRLF breaks shebangs under WSL/Linux
+# (bad interpreter: /bin/bash^M).
+*.sh text eol=lf
+
+# Extensionless customer-facing scripts published to this example repo
+init text eol=lf
+check-prereqs text eol=lf
+available-connectors text eol=lf
+az-auth text eol=lf
+preflight text eol=lf
