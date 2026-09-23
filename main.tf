@@ -33,7 +33,7 @@ locals {
 # be provisioned via Terraform, so doesn't add any dependencies
 # call this 'generic_source_connectors'?
 module "worklytics_connectors" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.6.9"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.7.0"
 
   base_dir                                 = var.psoxy_base_dir
   enabled_connectors                       = var.enabled_connectors
@@ -106,7 +106,7 @@ locals {
 
 
 module "psoxy" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.6.9"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.7.0"
 
   gcp_project_id                    = var.gcp_project_id
   environment_name                  = var.environment_name
@@ -173,7 +173,7 @@ locals {
 module "connection_in_worklytics" {
   for_each = local.all_instances
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-proxy-connection-generic?ref=v0.6.9"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-proxy-connection-generic?ref=v0.7.0"
 
   host_platform_id     = local.host_platform_id
   proxy_instance_id    = each.key
@@ -242,7 +242,6 @@ output "artifacts_bucket_id" {
 # output "external_api_alb" {
 #   description = "**beta** External Application Load Balancer (ALB) details from gcp-host (host, ip_address, todo_dns_setup, self_signed_ca_cert)."
 #   value       = module.psoxy.external_api_alb
-#   sensitive   = true
 # }
 
 output "todos_1" {
