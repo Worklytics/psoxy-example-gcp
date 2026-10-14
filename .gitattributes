@@ -8,3 +8,4 @@ check-prereqs text eol=lf
 available-connectors text eol=lf
 az-auth text eol=lf
 preflight text eol=lf
+test text eol=lf
