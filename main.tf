@@ -37,7 +37,7 @@ locals {
 # be provisioned via Terraform, so doesn't add any dependencies
 # call this 'generic_source_connectors'?
 module "worklytics_connectors" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.7.1"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-connectors?ref=v0.7.2"
 
   base_dir                                 = var.psoxy_base_dir
   enabled_connectors                       = var.enabled_connectors
@@ -110,7 +110,7 @@ locals {
 
 
 module "psoxy" {
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.7.1"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/gcp-host?ref=v0.7.2"
 
   gcp_project_id                    = var.gcp_project_id
   environment_name                  = var.environment_name
@@ -177,7 +177,7 @@ locals {
 module "connection_in_worklytics" {
   for_each = local.all_instances
 
-  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-proxy-connection-generic?ref=v0.7.1"
+  source = "git::https://github.com/worklytics/psoxy//infra/modules/worklytics-proxy-connection-generic?ref=v0.7.2"
 
   host_platform_id     = local.host_platform_id
   proxy_instance_id    = each.key
@@ -247,6 +247,11 @@ output "webhook_collector_instances" {
 output "artifacts_bucket_id" {
   description = "The ID of the artifacts google_storage_bucket resource"
   value       = module.psoxy.artifacts_bucket_id
+}
+
+output "lookup_tables" {
+  description = "GCS bucket names for lookup table outputs (lookup_tables keys). Empty map when lookup tables are not configured."
+  value       = module.psoxy.lookup_tables
 }
 
 output "repo_base_dir" {
